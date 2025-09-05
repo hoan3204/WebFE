@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 export const useAuth = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [infoUser, setInfoUser] = useState<any>();
+  const [infoCompany, setInfoCompany] = useState<any>();
   const pathname = usePathname(); // Lấy URL hiện tại
 
   useEffect(() => {
@@ -19,10 +20,19 @@ export const useAuth = () => {
 
         if(data.code == "success") {
           setIsLogin(true);
-          setInfoUser(data.infoUser);
+
+          if(data.infoUser) {
+            setInfoUser(data.infoUser);
+            setInfoCompany(null);
+          }
+
+          if(data.infoCompany) {
+            setInfoCompany(data.infoCompany);
+            setInfoUser(null);
+          }
         }
       });
   }, [pathname]);
 
-  return { isLogin, infoUser };
+  return { isLogin, infoUser, infoCompany };
 }

@@ -69,7 +69,7 @@ export const FormProfile = () => {
     }
   }, [infoUser]);
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
 
     const fullName = event.target.fullName.value;
@@ -88,21 +88,24 @@ export const FormProfile = () => {
       formData.append("phone", phone);
       formData.append("avatar", avatar);
 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
+      const promise = fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
         method: "PATCH",
         body: formData,
         credentials: "include", // Gửi kèm cookie
       })
-        .then(res => res.json())
-        .then(data => {
-          if(data.code == "error") {
-            toast.error(data.message);
+        .then(async (res) => {
+          const data = await res.json();
+          if (data.code === "error") {
+            throw new Error(data.message);
           }
+          return data;
+        });
 
-          if(data.code == "success") {
-            toast.success(data.message);
-          }
-        })
+      toast.promise(promise, {
+        loading: 'Đang cập nhật...',
+        success: (data) => `${data.message}`, // data ở đây là kết quả trả về khi `resolve`
+        error: (err) => err.message || 'Đã xảy ra lỗi!',
+      });
     }
   }
 

@@ -8,6 +8,7 @@ import 'filepond/dist/filepond.min.css';
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import { Toaster, toast } from 'sonner';
 
 // Đăng ký plugins
 registerPlugin(
@@ -94,13 +95,20 @@ export const FormProfile = () => {
       })
         .then(res => res.json())
         .then(data => {
-          console.log(data);
+          if(data.code == "error") {
+            toast.error(data.message);
+          }
+
+          if(data.code == "success") {
+            toast.success(data.message);
+          }
         })
     }
   }
 
   return (
     <>
+      <Toaster position="top-right" richColors />
       {infoUser && (
         <form onSubmit={handleSubmit} id="profileForm" action="" className="grid sm:grid-cols-2 grid-cols-1 gap-x-[20px] gap-y-[15px]">
           <div className="sm:col-span-2">

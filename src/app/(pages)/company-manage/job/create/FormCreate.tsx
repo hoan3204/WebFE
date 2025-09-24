@@ -9,6 +9,7 @@ import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { Toaster, toast } from 'sonner';
+import { positionList, workingFormList } from "@/config/variable";
 
 // Đăng ký plugins
 registerPlugin(
@@ -155,12 +156,9 @@ export const FormCreate = () => {
             id="position" 
             className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
           >
-            <option value="intern">Intern</option>
-            <option value="fresher">Fresher</option>
-            <option value="junior">Junior</option>
-            <option value="middle">Middle</option>
-            <option value="senior">Senior</option>
-            <option value="manager">Manager</option>
+            {positionList.map((item, index) => (
+              <option key={index} value={item.value}>{item.label}</option>
+            ))}
           </select>
         </div>
         <div className="">
@@ -172,9 +170,9 @@ export const FormCreate = () => {
             id="workingForm" 
             className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
           >
-            <option value="office">Tại văn phòng</option>
-            <option value="remote">Làm từ xa</option>
-            <option value="flexible">Linh hoạt</option>
+            {workingFormList.map((item, index) => (
+              <option key={index} value={item.value}>{item.label}</option>
+            ))}
           </select>
         </div>
         <div className="sm:col-span-2">

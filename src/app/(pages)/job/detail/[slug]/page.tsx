@@ -114,7 +114,7 @@ export default async function JobDetailPage({ params }: {
                       <div className="font-[700] text-[18px] text-[#121212] mb-[10px]">
                         {jobDetail.companyName} 
                       </div>
-                      <Link href={`/company/detail/${jobDetail.id}`} className="flex items-center gap-[8px] font-[400] text-[16px] text-[#0088FF]">
+                      <Link href={`/company/detail/${jobDetail.companyId}`} className="flex items-center gap-[8px] font-[400] text-[16px] text-[#0088FF]">
                         Xem công ty <FaArrowRightLong className="" />
                       </Link>
                     </div>

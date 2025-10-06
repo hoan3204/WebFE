@@ -20,6 +20,10 @@ export const CVList = () => {
       })
   }, []);
 
+  const handleDeleteSuccess = (id: string) => {
+    setListCV(prev => prev.filter(cv => cv.id !== id));
+  }
+
   return (
     <>
       <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
@@ -28,7 +32,7 @@ export const CVList = () => {
           item.jobWorkingForm = workingFormList.find(itemWork => itemWork.value == item.jobWorkingForm)?.label;
 
           return (
-            <CVItem key={item.id} item={item} />
+            <CVItem key={item.id} item={item} onDeleteSuccess={handleDeleteSuccess} />
           )
         })}
       </div>

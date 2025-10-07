@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import { Suspense } from "react"
 import { SearchContainer } from "./SearchContainer"
 
 export const metadata: Metadata = {
@@ -11,7 +12,9 @@ export default function SearchPage() {
     <>
       {/* Kết quả tìm kiếm */}
       <div className="py-[60px]">
-        <SearchContainer />
+        <Suspense fallback={<div className="container mx-auto px-[16px]">Đang tải...</div>}>
+          <SearchContainer />
+        </Suspense>
       </div>
       {/* Hết Kết quả tìm kiếm */}
     </>

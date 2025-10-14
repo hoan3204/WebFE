@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 }
 
 export default async function JobDetailPage({ params }: {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }) {
   const { slug } = await params;
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/job/detail/${slug}`);

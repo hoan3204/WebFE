@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 }
 
 export default async function CompanyManageCVDetailPage({ params }: {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }) {
   const { slug } = await params;
 

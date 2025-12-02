@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import JustValidate from "just-validate";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster, toast } from 'sonner';
+import { FormExtractCCCD } from "./FormExtractCCCD";
 
 export const FormApply = (props: {
   jobId: string
 }) => {
   const { jobId } = props;
+  const [extractedCCCDName, setExtractedCCCDName] = useState("");
 
   useEffect(() => {
     const validator = new JustValidate("#applyForm");
@@ -86,6 +88,11 @@ export const FormApply = (props: {
         formData.append("phone", phone);
         formData.append("fileCV", fileCV);
         
+        // Thêm tên từ CCCD nếu có
+        if (extractedCCCDName) {
+          formData.append("ho_va_ten_cccd", extractedCCCDName);
+        }
+        
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/job/apply`, {
           method: "POST",
           body: formData
@@ -99,21 +106,36 @@ export const FormApply = (props: {
             if(data.code === "success") {
               toast.success(data.message);
               event.target.reset();
+              setExtractedCCCDName("");
             }
           })
       })
-  }, []);
+  }, [jobId, extractedCCCDName]);
 
   return (
     <>
       <Toaster richColors position="top-right" />
-      <form id="applyForm" action="" className="">
+      <form id="applyForm" action="" className="space-y-[15px]">
+        {/* CCCD Extract Section */}
+        <FormExtractCCCD 
+          onExtractedName={setExtractedCCCDName}
+        />
+
+        {/* Full Name Field - Will be filled with extracted CCCD name if available */}
         <div className="mb-[15px]">
           <label htmlFor="fullName" className="block font-[500] text-[14px] text-black mb-[5px]">
             Họ tên *
+            {extractedCCCDName && <span className="text-[12px] text-[#0088FF] ml-[8px]">(Từ CCCD)</span>}
           </label>
-          <input type="text" name="fullName" id="fullName" className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black" />
+          <input 
+            type="text" 
+            name="fullName" 
+            id="fullName" 
+            defaultValue={extractedCCCDName}
+            className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black" 
+          />
         </div>
+
         <div className="mb-[15px]">
           <label htmlFor="email" className="block font-[500] text-[14px] text-black mb-[5px]">
             Email *

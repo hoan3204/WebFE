@@ -6,9 +6,11 @@ import { CVItem } from "./CVItem";
 
 export const CVList = () => {
   const [listCV, setListCV] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/cv/list`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/cv/list?page=${page}`, {
       method: "GET",
       credentials: "include", // Gửi kèm cookie
     })
@@ -16,12 +18,18 @@ export const CVList = () => {
       .then(data => {
         if(data.code == "success") {
           setListCV(data.listCV);
+          setTotalPage(data.pagination?.totalPages);
         }
       })
-  }, []);
+  }, [page]);
 
   const handleDeleteSuccess = (id: string) => {
     setListCV(prev => prev.filter(cv => cv.id !== id));
+  }
+
+  const handlePagination = (event: any) => {
+    const value = event.target.value;
+    setPage(parseInt(value));
   }
 
   return (
@@ -37,13 +45,20 @@ export const CVList = () => {
         })}
       </div>
 
-      <div className="mt-[30px]">
-        <select name="" className="border border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]">
-          <option value="">Trang 1</option>
-          <option value="">Trang 2</option>
-          <option value="">Trang 3</option>
-        </select>
-      </div>
+      {totalPage && (
+        <div className="mt-[30px]">
+          <select 
+            name="" 
+            className="border border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]"
+            onChange={handlePagination}
+            value={page}
+          >
+            {Array(totalPage).fill("").map((item, index) => (
+              <option key={index} value={index+1}>Trang {index+1}</option>
+            ))}
+          </select>
+        </div>
+      )}
     </>
   )
 }
